@@ -1,5 +1,6 @@
 #include "Classes.h"
 #include <vector>
+#include <string>
 
 double CAMERA_Y = 0;
 
@@ -31,3 +32,5 @@ std::vector<Coordinates> obstacles_plane2;
 double BALL_SPEED = 0.5;
 int NUMBER_OF_POINTS = 5;
 int LOOP_COUNT = 10;
+
+std::string tutorial_text = "READY?";

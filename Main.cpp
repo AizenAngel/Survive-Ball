@@ -277,6 +277,39 @@ static void score() {
         }
 
     glPopMatrix();
+
+}
+
+static void display_controls(){
+    if(int(SCORE) < 20){
+        tutorial_text = "READY?";
+    }
+    else if(int(SCORE) < 30) {
+        tutorial_text = "3";
+    }
+    else if(int(SCORE) < 40) {
+        tutorial_text = "2";
+    }
+    else if(int(SCORE) < 50) {
+        tutorial_text = "1";
+    }
+    else if(int(SCORE) < 55) {
+        tutorial_text = "GO!";
+    }
+    else {
+        tutorial_text = "";
+    }
+
+    glPushMatrix();
+        
+        glColor3f(1, 1, 1);
+        glRasterPos3f(ball_coordinates.x + 0.5, 3, ball_coordinates.z);
+
+        for (auto it: tutorial_text){
+            glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, it);
+        }
+
+    glPopMatrix();
 }
 
 static void on_reshape(int width, int height) {
@@ -398,6 +431,7 @@ static void on_display(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     score();
+    display_controls();
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
