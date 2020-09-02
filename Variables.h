@@ -36,3 +36,5 @@ int LOOP_COUNT = 10;
 
 std::string tutorial_text = "READY?";
 std::string SCORE_DISPLAY = "";
+
+double SPEED_BOOST = 0.002;

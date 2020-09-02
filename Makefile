@@ -1,11 +1,11 @@
 PROGRAM = SurviveBall
 CC      = g++
-LDLIBS  = -lglut -lGLU -lGL -lm
-ADDFILES = image.cpp 
-ADDLIBS = Classes.h Constansts.h image.h Variables.h
+CFLAGS  = -g -Wall -I/usr/X11R6/include -I/usr/pkg/include
+LDFLAGS = -L/usr/X11R6/lib -L/usr/pkg/lib
+LDLIBS  = -lglut -lGLU -lGL
 
-$(PROGRAM): Main.o 
-	$(CC) $(LDFLAGS) -o $(PROGRAM) $(ADDFILES) $(ADDLIBS) Main.o  $(LDLIBS)
+$(PROGRAM): main.o image.o
+	$(CC) $(LDFLAGS) -o $(PROGRAM) $(ADDFILES) $(ADDLIBS) image.o main.o $(LDLIBS)
 
 .PHONY: clean dist
 
