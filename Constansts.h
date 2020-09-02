@@ -1,4 +1,5 @@
 #include <vector>
+#include <string>
 
 #define PI 3.14
 
@@ -49,3 +50,5 @@ const double MAX_JUMP_HEIGHT = 1.5;
 const double DECISION_BOUNDARY = 3.5;
 
 const double LENGTH = 100;
+const std::string GAME_OVER = "GAME OVER!";
+const std::string PRESS_ESC = "PRESS ESC TO EXIT THE GAME!";

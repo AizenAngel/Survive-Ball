@@ -33,4 +33,6 @@ double BALL_SPEED = 0.5;
 int NUMBER_OF_POINTS = 5;
 int LOOP_COUNT = 10;
 
+
 std::string tutorial_text = "READY?";
+std::string SCORE_DISPLAY = "";

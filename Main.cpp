@@ -116,6 +116,8 @@ int main(int argc, char** argv) {
 
     glutMainLoop();
 
+    srand(time(NULL));
+
     return 0;
 }
 
@@ -263,14 +265,14 @@ static void on_timer(int value){
         glutTimerFunc(20, on_timer, 0);
 }
 
-static void score() {
+static void score(double x, double y, double z) {
 
     glPushMatrix();
         
         glColor3f(1, 1, 1);
-        glRasterPos3f(ball_coordinates.x + 4, 3, ball_coordinates.z);
-
-        std::string SCORE_DISPLAY = SCORE_TEXT + std::to_string(int(SCORE));
+        glRasterPos3f(x, y, z);
+        
+        SCORE_DISPLAY = SCORE_TEXT + std::to_string(int(SCORE));      
 
         for (auto it: SCORE_DISPLAY){
             glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, it);
@@ -303,7 +305,7 @@ static void display_controls(){
     glPushMatrix();
         
         glColor3f(1, 1, 1);
-        glRasterPos3f(ball_coordinates.x + 0.5, 3, ball_coordinates.z);
+        glRasterPos3f(ball_coordinates.x + 0.2, 3, ball_coordinates.z);
 
         for (auto it: tutorial_text){
             glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, it);
@@ -399,6 +401,27 @@ static void draw_ball() {
     glPopMatrix();
 }
 
+static void game_over(){
+    glPushMatrix();
+        glColor3f(1, 1, 1);
+        glRasterPos3f(ball_coordinates.x + 0.5, 3, ball_coordinates.z);      
+
+        for (auto it: GAME_OVER){
+            glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, it);
+        }
+    glPopMatrix();
+
+    glPushMatrix();
+        glColor3f(1, 1, 1);
+        glRasterPos3f(ball_coordinates.x + 1.2, 2.8, ball_coordinates.z);      
+
+        for (auto it: PRESS_ESC){
+            glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, it);
+        }
+    glPopMatrix();
+
+}
+
 static void draw_background(){
     glPushMatrix();
         glRotatef(110,1,0,0);
@@ -430,7 +453,13 @@ static void on_display(void) {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    score();
+    if(!animation_ongoing && SCORE > 60){
+        game_over();
+        score(ball_coordinates.x + 0.3, 2.6, ball_coordinates.z);
+    }
+    else
+        score(ball_coordinates.x + 4, 3, ball_coordinates.z);
+
     display_controls();
 
     glMatrixMode(GL_MODELVIEW);
