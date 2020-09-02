@@ -1,4 +1,4 @@
-# :ball: SurviveBall
+# :volcano: SurviveBall
 ---
 
 ### :memo: Opis:
