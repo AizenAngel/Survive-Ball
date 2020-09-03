@@ -1,12 +1,12 @@
 #include <vector>
 #include <string>
 
-#define PI 3.14
+#define PI 3.14 
 
-const int WINDOW_HEIGHT = 600;
-const int WINDOW_WIDTH = 600;
-const int WINDOW_POSITION_X = 100;
-const int WINDOW_POSITION_Y = 100;
+const int WINDOW_HEIGHT = 600; //visina prozora
+const int WINDOW_WIDTH = 600; // širina prozora
+const int WINDOW_POSITION_X = 100; // X pozicija prozora
+const int WINDOW_POSITION_Y = 100; // Z pozicija prozora
 
 const unsigned char KEY_ESC = 27;
 const unsigned char KEY_LEFT = 'a';
@@ -17,6 +17,7 @@ const unsigned char KEY_START = 'g';
 const unsigned char ARROW_UP = 'u';
 const unsigned char ARROW_DOWN = 'j';
 
+// moguće X kooridnate prepreka
 const std::vector<double> possible_positions = { 
 -0.924962185096, 1.45013815562, -1.05236246367, -4,  
 -1.19527567674, -4, -2.8823261238, -3.5,
@@ -44,15 +45,16 @@ const std::vector<double> possible_positions = {
 -3.51738518214, -3.42755399603, -2.65515831403, 3.48895264057, 
 1.0049741439, -4.22870685386, 1.05341439662, -3.7};
 
-const int MOVEMENT = 2;
-const double JUMP_SPEED = 0.0628;
-const double MAX_JUMP_HEIGHT = 1.5;
-const double DECISION_BOUNDARY = 3.5;
+//const int MOVEMENT = 2; 
+const double JUMP_SPEED = 0.0628; // brzina skoka
+const double MAX_JUMP_HEIGHT = 1.5; // MAX visina do koje možemo da skočimo
+//const double DECISION_BOUNDARY = 3.5;
 
-const double LENGTH = 100;
-const std::string GAME_OVER = "GAME OVER!";
+const double LENGTH = 100; // dužina racni
+//const std::string GAME_OVER = "GAME OVER!";
 const std::string PRESS_ESC = "PRESS ESC TO EXIT THE GAME!";
 
+// "motivacione" poruke
 std::vector<std::string> thrash_talk = {"Were you even trying?",
                                         "How about you try again..... NEVER?",
                                         "Ouch, that was fast.", 

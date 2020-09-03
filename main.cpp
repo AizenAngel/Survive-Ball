@@ -9,8 +9,8 @@
 #include "Variables.h"
 #include "image.h"
 
-const char* FILENAME0 = "floor_is_lava.bmp";
-const char* FILENAME1 = "mars.bmp";
+const char* FILENAME0 = "floor_is_lava.bmp"; //tekstura za ravan po kojoj se lopta krece
+const char* FILENAME1 = "mars.bmp"; // tekstura za pozadinu
 
 static int timer_active;
 
@@ -122,6 +122,8 @@ int main(int argc, char** argv) {
     return 0;
 }
 
+//akcije koje se dešavaju na klik određenih tastera
+// detalji svakog dugmeta se mogu naći u fajlu Constants.h
 static void on_keyboard(unsigned char key, int x, int y) {
     switch (key) {
 
@@ -142,9 +144,6 @@ static void on_keyboard(unsigned char key, int x, int y) {
             break;
 
         case KEY_START:
-            
-            //std::cout<<"Ah yes, the game should be starting now!"<<"\n";
-            
             if (!animation_ongoing) {
                 animation_ongoing = 1;
                 glutTimerFunc(20, on_timer, 0);
@@ -185,13 +184,15 @@ static void on_timer(int value){
     if (value != 0)
         return;
 
-
+    // Trenutak kada jednu ravan zamenjujemo drugom. 
+    // Ideja preuzeta iz projekta koleginice Maje Crnomarković.
     if (plane1_coordinates.z + 50 <= 0) {
         obstacles_plane1.clear();
         plane1_coordinates.z = 150;
         make_obstacles(1);
         draw_obstacles(1);
     }
+
 
     if (plane2_coordinates.z + 50 <= 0) {
         obstacles_plane2.clear();
@@ -200,24 +201,27 @@ static void on_timer(int value){
         draw_obstacles(2);
     }
 
+    // ravni se pomeraju unazad konstantno, određenim brzinama
     plane1_coordinates.z -= (0.5 + SPEED_INCREASE);
     plane2_coordinates.z -= (0.5 + SPEED_INCREASE);
+    
+    // detekcija kolizije
     colision_detection();
 
+    // računamo SCORE
     SCORE += 0.2 + 0.2 * (int(SPEED_INCREASE));
 
+    // na svakih 200 vrednosti SCORE-a, otežavamo igru,
+    // tako što ubrzavamo loptu i više prepreka se renderuje
     if (int(SCORE) % 200 == 0 && SCORE > 1) {
         SPEED_BOOST += 0.002;
         BALL_SPEED += SPEED_BOOST;
-
-        //std::cout << "Ah yes, score that can be devided by 200 "<<int(SCORE) << "\n";
-        //std::cout << "Ball speed" << BALL_SPEED << "\n\n";
 
         NUMBER_OF_POINTS++;
     }
 
 
-
+    // prepreke se kreću zajedno sa ravni unazad.
     for (int i = 0; i < obstacles_plane1.size(); i++) {
         obstacles_plane1[i].z -= (0.5 + SPEED_INCREASE);
     }
@@ -226,6 +230,7 @@ static void on_timer(int value){
         obstacles_plane2[i].z -= (0.5 + SPEED_INCREASE);
     }
 
+    // nećemo da dozvolimo lopti da izadje van nekih granica
     if (ATTEMPT_LEFT && ball_coordinates.x < 4) {
         ball_coordinates.x += (0.1 + SPEED_BOOST);
     }
@@ -234,6 +239,8 @@ static void on_timer(int value){
         ball_coordinates.x -= (0.1 + SPEED_BOOST);
     }
 
+    // Deo koda odgovoran za akciju skoka lopte i njeno vraćanje nazad.
+    // Jedna jednostavna sinusna funkcija.
     if (ATTEMPT_JUMP) {
         if (jump_counter < PI) {
             jump_counter += JUMP_SPEED;
@@ -245,10 +252,7 @@ static void on_timer(int value){
         }
     }
     
-    // std::cout<<"Speed booster: "<<SPEED_BOOSTER_ACTIVE<<"\n";
-    // std::cout<<"Speed var: "<<SPEED_BOOSTER_ACTIVE<<"\n";
-    // std::cout<<"Speed increase: "<<SPEED_INCREASE<<"\n";
-
+    // sličan kod kao gore, samo što ovde imamo BOOST lopte umesto skoka.
     if (SPEED_BOOSTER_ACTIVE) {
         if (SPEED_BOOST_VAR <= PI) {
             SPEED_BOOST_VAR += JUMP_SPEED;
@@ -268,6 +272,7 @@ static void on_timer(int value){
         glutTimerFunc(20, on_timer, 0);
 }
 
+// deo koda koji ispisuje SCORE igrača sa strane
 static void score(double x, double y, double z) {
 
     glPushMatrix();
@@ -285,6 +290,7 @@ static void score(double x, double y, double z) {
 
 }
 
+// Kod koji je odgovoran za ispis na početku igre i obaveštavanje igrača da je igra počela.
 static void display_controls(){
     if(int(SCORE) < 20){
         tutorial_text = "READY?";
@@ -317,6 +323,7 @@ static void display_controls(){
     glPopMatrix();
 }
 
+
 static void on_reshape(int width, int height) {
 
     glViewport(0, 0, width, height);
@@ -328,6 +335,7 @@ static void on_reshape(int width, int height) {
         1, 1500);
 }
 
+// Postavljamo teksture za put po kojem se lopta kreće.
 static void draw_plane() {
     glPushMatrix();
      glBindTexture(GL_TEXTURE_2D, names[0]);
@@ -396,6 +404,7 @@ static void draw_plane() {
     glPopMatrix();
 }
 
+//Crtamo loptu
 static void draw_ball() {
     glPushMatrix();
         glColor3f(1, 1, 1);
@@ -404,6 +413,8 @@ static void draw_ball() {
     glPopMatrix();
 }
 
+// Deo koda koji je odgovoran za ispis poruke na kraju igre i za vreme pauza. 
+// Obaveštava korisnika o trenutnom SCORE-u i motiviše ga da nastavi da igra :).
 static void game_over(){
     glPushMatrix();
         glColor3f(1, 1, 1);
@@ -427,6 +438,7 @@ static void game_over(){
 
 }
 
+// postavljamo pozadinu
 static void draw_background(){
     glPushMatrix();
         glRotatef(110,1,0,0);
@@ -467,6 +479,8 @@ static void on_display(void) {
 
     display_controls();
 
+    // omogućavamo kameri da prati kretanje lopte.
+    // Takodje, igrač ima opciju da podešava visinu kamere prema svojim potrebama.
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gluLookAt(ball_coordinates.x, 3 + CAMERA_Y, -1,
@@ -489,10 +503,14 @@ static void on_display(void) {
     glutSwapBuffers();
 }
 
+// deo koda odgovoran za postavljanje NUMBER_OF_POINTS prepreka.
 static std::vector<double> get_obstacle_locations() {
     
     std::vector<double> positions;
 
+    // pozicije prepreka su sačuvane u fajlu Constants.h.
+    // Odatle biramo NUMBER_OF_POINTS prepreka i postavljamo ih.
+    // Ovim omogućavamo da neke prepreke budu preklopljene, čime ih je teže zaobići.
     for (int i = 0; i < NUMBER_OF_POINTS; i++) {
         int index = (int)rand() % 100;
         positions.push_back(possible_positions[index]);
@@ -501,27 +519,34 @@ static std::vector<double> get_obstacle_locations() {
     return positions;
 }
 
+// Deo koda koji je odgovoran za generisanje specijalne zelene prepreke.
 static bool should_generate_reward() {
     int index = (int)rand() % 100;
     
     return (possible_positions[index] > 0 ? true : false);
 }
 
+// Deo koda odgovoran za određivanje poziicja prepreka na putu.
 static void make_obstacles(int type){
+    // Ideja preuzeta od koleginice Maje Crnomarković.
+    // Svaku od ravni po kojoj se lopta kreće, izdelimo na 10 traka. 
+    // Onda generišemo random broj, koji će predstavljati broj lopti koje su generisane u jednom traci.
     for (int i = 0; i < 10; i++) {
         int num = (int)rand() % NUMBER_OF_POINTS;
 
         if (num == 0)
             num = 4;
 
-        std::vector<bool> free_positions = { 1, 1, 1, 1, 1 };
+        std::vector<bool> free_positions(NUMBER_OF_POINTS, 1);
+
         for (int j = 0; j < num; j++) {
             Coordinates p;
 
             std::vector <double> positions = get_obstacle_locations();
-
+            // obezbeđujemo da u jednoj ravni postoji tačno jedna specijalna prepreka koja ubrzava loptu.
             if (!REWARD_COUNTER) {
                 REWARD_COUNTER = 1;
+                
                 bool have_reward = should_generate_reward();
                 if (have_reward) {
                     free_positions[j] = 1;
@@ -572,6 +597,7 @@ static void make_obstacles(int type){
     REWARD_COUNTER = 0;
 }
 
+// Nalazimo distancu lopte od prepreka
 static float find_distance(Coordinates cord) {
     Coordinates dist;
     dist = ball_coordinates - cord;
@@ -579,6 +605,7 @@ static float find_distance(Coordinates cord) {
     return dist.distance();
 }
 
+// Crtanje prepreka određenog tipa na određenoj ravni. 
 static void draw_obstacles(const int plane) {
     int len = 0;
 
@@ -611,7 +638,8 @@ static void draw_obstacles(const int plane) {
     }
 }
 
-
+// detekcija kolizije. Ako je rastojanje koordinata lopte i prepreke manje od 0.75,
+// proglašavamo da je došlo do kolizije i shodno tome preduzimamo akciju ubrzavanja lopte ili prekidanja igre.
 static void colision_detection() {
 
     int plane = (plane1_coordinates.z < plane2_coordinates.z ? 1 : 2);
@@ -641,14 +669,10 @@ static void colision_detection() {
             if (dist <= 0.75) {
 
                 if (obstacles_plane2[i].type_obstacle && !SPEED_BOOSTER_ACTIVE) {
-                    //std::cout<<"Speed booster: "<<SPEED_BOOSTER_ACTIVE<<"\n";
-                    //std::cout<<"Speed var: "<<SPEED_BOOSTER_ACTIVE<<"\n";
                     animation_ongoing = 0;
                 }
 
                 if (obstacles_plane2[i].type_speed) {
-                    //std::cout<<"Speed booster colision speed: "<<SPEED_BOOSTER_ACTIVE<<"\n";
-                    //std::cout<<"Speed var colision speed: "<<SPEED_BOOSTER_ACTIVE<<"\n";
                     SPEED_BOOSTER_ACTIVE = 1;
                 }
 
