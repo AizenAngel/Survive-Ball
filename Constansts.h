@@ -52,3 +52,8 @@ const double DECISION_BOUNDARY = 3.5;
 const double LENGTH = 100;
 const std::string GAME_OVER = "GAME OVER!";
 const std::string PRESS_ESC = "PRESS ESC TO EXIT THE GAME!";
+
+std::vector<std::string> thrash_talk = {"Were you even trying?",
+                                        "How about you try again..... NEVER?",
+                                        "Ouch, that was fast.", 
+                                        "Surely, you must be joking, right?"};

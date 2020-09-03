@@ -4,7 +4,8 @@
 ### :memo: Opis:
 Cilj projekta je napraviti igru u kojoj igrač kontroliše loptu, s ciljem da što duže izbegava prepreke.  Prepreke su označene kao narandžaste lava kocke. Zelena kocka je BOOST koji lopti daje privremeno ubrzanje i postaje imuna na kontakt sa narandžastim lava kockama.  
 Legenda kaže da je nemoguće postići score preko 1000. ;)  
-Srećno!
+Srećno!  
+PS: Ako zafali motivacije, pauziraj igru :D
 
 ---
 

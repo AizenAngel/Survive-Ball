@@ -409,7 +409,9 @@ static void game_over(){
         glColor3f(1, 1, 1);
         glRasterPos3f(ball_coordinates.x + 0.5, 3, ball_coordinates.z);      
 
-        for (auto it: GAME_OVER){
+        int index = (int)rand() % 4;
+
+        for (auto it: thrash_talk[index]){
             glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, it);
         }
     glPopMatrix();
